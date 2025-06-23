@@ -1,16 +1,16 @@
 <roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
 	<External>null</External>
 	<External>nil</External>
-	<Item class="Folder" referent="RBX6528976073054676A637E424C385F4BF">
+	<Item class="Folder" referent="RBX571102FFC9774BDB89C7D4CFA5F725EF">
 		<Properties>
 			<BinaryString name="AttributesSerialize"></BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
-			<string name="Name">TC2 Boss Catalog Inserter</string>
+			<string name="Name">TC2BossCatalogInserter</string>
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Folder" referent="RBX3DBFB06760044BBB95F7FD6A77E478C2">
+		<Item class="Folder" referent="RBX639D93CD96FF42FABC4E608592CE7DE4">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -19,7 +19,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="ModuleScript" referent="RBX0AD90D5770764856B1494CA0A1CD18A1">
+			<Item class="ModuleScript" referent="RBXED9839902B41496184A1E4D50D37782B">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -125,7 +125,7 @@ return CustomTextButtonClass]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXD08F635B8A4A49549AD905877C133ED5">
+			<Item class="ModuleScript" referent="RBXE6618D5D91B347BAAEDDD573DADF3618">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -384,7 +384,7 @@ return module]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXB81A6539A43F4E5BB08D6F8DA56A0C87">
+			<Item class="ModuleScript" referent="RBX29960FC94C5241B1B825E87A9E74D8E2">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -520,7 +520,7 @@ return LabeledTextInputClass
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Accessory" referent="RBX841994F747314537A2369EEC07F81EDF">
+		<Item class="Accessory" referent="RBX0285114276C446C8B637B34E5CA3FEB3">
 			<Properties>
 				<token name="AccessoryType">0</token>
 				<CoordinateFrame name="AttachmentPoint">
@@ -544,7 +544,7 @@ return LabeledTextInputClass
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="Part" referent="RBXDA72A205D9D14AF8B3D0779B326B96BC">
+			<Item class="Part" referent="RBX477DC7E62A814B65BCC96ED39B70F9D7">
 				<Properties>
 					<bool name="Anchored">false</bool>
 					<BinaryString name="AttributesSerialize"></BinaryString>
@@ -642,7 +642,7 @@ return LabeledTextInputClass
 						<Z>1</Z>
 					</Vector3>
 				</Properties>
-				<Item class="Vector3Value" referent="RBX8D0D7473A57444BC87BC63653A0D0EF0">
+				<Item class="Vector3Value" referent="RBX65D76600DC2C40DB96761B49E331B117">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -657,7 +657,7 @@ return LabeledTextInputClass
 						</Vector3>
 					</Properties>
 				</Item>
-				<Item class="SpecialMesh" referent="RBX2792A730FEEC4FBC95F3C3492CD0CA5B">
+				<Item class="SpecialMesh" referent="RBXFFA0768BF7484A4E9477CDFAADF08D51">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -685,7 +685,7 @@ return LabeledTextInputClass
 						</Vector3>
 					</Properties>
 				</Item>
-				<Item class="Attachment" referent="RBX857DBDD90AC44077B8324288A98F51C8">
+				<Item class="Attachment" referent="RBX37F07C07E8AD4D4DB716C67A796D47E4">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<CoordinateFrame name="CFrame">
@@ -709,7 +709,7 @@ return LabeledTextInputClass
 						<BinaryString name="Tags"></BinaryString>
 						<bool name="Visible">false</bool>
 					</Properties>
-					<Item class="Vector3Value" referent="RBX5367A84AA8E142C69502B86D7B4B539B">
+					<Item class="Vector3Value" referent="RBX580CEA306F2648EB830C847242427C8B">
 						<Properties>
 							<BinaryString name="AttributesSerialize"></BinaryString>
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -727,7 +727,7 @@ return LabeledTextInputClass
 				</Item>
 			</Item>
 		</Item>
-		<Item class="Script" referent="RBX20FA55184AAE42B5AA71087F17CFB132">
+		<Item class="Script" referent="RBX80C8B3311C7F4B1890B2A1881D9B25FD">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
