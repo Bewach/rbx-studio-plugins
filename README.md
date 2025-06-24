@@ -19,5 +19,4 @@ Supports undo and redo. (pretty sure)
 USAGE:\
 When used with accessories, it just places them inside the character.\
 With classic clothing (shirts and pants), it replaces the existing ones inside the character.\
-With dynamic heads, it creates an accessory and sets the character's head transparency to 1.\
-Make sure to use the ID of the dynamic head itself, not the ID of the bundle it's in. (Scroll down on the bundle page to see included items)
+With dynamic heads, it creates an accessory and sets the character's head transparency to 1.

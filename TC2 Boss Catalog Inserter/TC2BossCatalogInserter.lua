@@ -94,7 +94,7 @@ insertButtonObject.MouseButton1Click:Connect(function()
 		end)
 		if success then
 			local bundle = result
-			print(bundle)
+			--print(bundle)
 			if bundle["BundleType"] ~= "DynamicHead" then
 				warn("Invalid asset ID or inserted bundle is not a dynamic head")
 				ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
@@ -134,6 +134,12 @@ insertButtonObject.MouseButton1Click:Connect(function()
 		texture.Parent = handle
 		texture.Texture = textureId
 		character.Head.Transparency = 1
+		for i, child in character.Head:GetChildren() do
+			-- Hide the face decals that normally linger when the head is invisible
+			if child.ClassName == "Decal" then
+				child.Transparency = 1
+			end
+		end
 	elseif asset.ClassName == "Shirt" or asset.ClassName == "Pants" then
 		character:FindFirstChild(asset.ClassName).Parent = nil
 		asset.Parent = character
