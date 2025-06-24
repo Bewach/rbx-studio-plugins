@@ -49,10 +49,12 @@ insertButtonObject.Position = UDim2.new(0, 80, 0, 60)
 
 insertButtonObject.MouseButton1Click:Connect(function()
 	local assetId: number = assetInput:GetValue()
+	-- Make sure the user entered something
 	if assetId == "" then
 		return
 	end
 	
+	-- Get the selected character
 	local character: Model
 	local selectedObjects = Selection:Get()
 	if #selectedObjects == 1 then
@@ -77,7 +79,8 @@ insertButtonObject.MouseButton1Click:Connect(function()
 		ChangeHistoryService:FinishRecording("Insert asset", Enum.FinishRecordingOperation.Commit)
 		return
 	end
-
+	
+	-- Get the asset wrapped in a model
 	local tempModel: Model
 	local success, result = pcall(function()
 		return game:GetService("InsertService"):LoadAsset(assetId)
@@ -85,9 +88,31 @@ insertButtonObject.MouseButton1Click:Connect(function()
 	if success then
 		tempModel = result
 	else
-		warn("Could not insert asset: " .. tostring(result))
-		ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
-		return
+		-- Try interpreting the ID as a bundle ID
+		local success, result = pcall(function()
+			return game:GetService("AssetService"):GetBundleDetailsAsync(assetId)
+		end)
+		if success then
+			local bundle = result
+			print(bundle)
+			if bundle["BundleType"] ~= "DynamicHead" then
+				warn("Invalid asset ID or inserted bundle is not a dynamic head")
+				ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
+				return
+			end
+			-- Some bundles have the dynamic head first, some have the mood first
+			if bundle["Items"][1]["Name"] == "Default Mood" or bundle["Items"][1]["Name"] == "DefaultFallBackMood" then
+				tempModel = game:GetService("InsertService"):LoadAsset(bundle["Items"][2]["Id"])
+			else
+				tempModel = game:GetService("InsertService"):LoadAsset(bundle["Items"][1]["Id"])
+			end
+		else
+			-- I don't think you can reach here since bundle IDs also start from 1,
+			-- so the bundle check will always work
+			warn("Could not insert asset: " .. tostring(result))
+			ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
+			return
+		end
 	end
 	local asset = tempModel:GetChildren()[1]
 	
@@ -115,7 +140,7 @@ insertButtonObject.MouseButton1Click:Connect(function()
 	else
 		asset.Parent = character
 	end
-	tempModel:Destroy()
+	tempModel:Destroy() -- Delete the asset wrapper
 	--print(asset.ClassName)
 	ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
 end)
