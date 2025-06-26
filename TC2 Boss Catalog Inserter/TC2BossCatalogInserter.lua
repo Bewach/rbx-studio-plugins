@@ -75,18 +75,18 @@ insertButtonObject.MouseButton1Click:Connect(function()
 		-- Handle error here. This indicates that your plugin began a previous
 		-- recording and never completed it. You may only have one recording
 		-- per plugin active at a time.
-		warn("[ChangeHistory] Unable to begin recording: another recording is already in progress. Cancelling current operation.")
+		warn("[ChangeHistory] Unable to begin recording: another recording is already in progress. Cancelling current operation. Please restart Studio if the issue persists.")
 		ChangeHistoryService:FinishRecording("Insert asset", Enum.FinishRecordingOperation.Commit)
 		return
 	end
 	
-	-- Get the asset wrapped in a model
-	local tempModel: Model
+	-- Get the asset from the array of instances
+	local asset
 	local success, result = pcall(function()
-		return game:GetService("InsertService"):LoadAsset(assetId)
+		return game:GetObjects("rbxassetid://" .. assetId)[1]
 	end)
 	if success then
-		tempModel = result
+		asset = result
 	else
 		-- Try interpreting the ID as a bundle ID
 		local success, result = pcall(function()
@@ -102,9 +102,9 @@ insertButtonObject.MouseButton1Click:Connect(function()
 			end
 			-- Some bundles have the dynamic head first, some have the mood first
 			if bundle["Items"][1]["Name"] == "Default Mood" or bundle["Items"][1]["Name"] == "DefaultFallBackMood" then
-				tempModel = game:GetService("InsertService"):LoadAsset(bundle["Items"][2]["Id"])
+				asset = game:GetObjects("rbxassetid://" .. bundle["Items"][2]["Id"])[1]
 			else
-				tempModel = game:GetService("InsertService"):LoadAsset(bundle["Items"][1]["Id"])
+				asset = game:GetObjects("rbxassetid://" .. bundle["Items"][1]["Id"])[1]
 			end
 		else
 			-- I don't think you can reach here since bundle IDs also start from 1,
@@ -114,7 +114,6 @@ insertButtonObject.MouseButton1Click:Connect(function()
 			return
 		end
 	end
-	local asset = tempModel:GetChildren()[1]
 	
 	if asset.ClassName == "SpecialMesh" then
 		--print("we got a dynamic head over here")
@@ -146,7 +145,6 @@ insertButtonObject.MouseButton1Click:Connect(function()
 	else
 		asset.Parent = character
 	end
-	tempModel:Destroy() -- Delete the asset wrapper
 	--print(asset.ClassName)
 	ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
 end)
