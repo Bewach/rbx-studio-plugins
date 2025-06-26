@@ -80,36 +80,29 @@ insertButtonObject.MouseButton1Click:Connect(function()
 		return
 	end
 	
-	-- Get the asset from the array of instances
+	-- Try interpreting the ID as a bundle ID
 	local asset
 	local success, result = pcall(function()
-		return game:GetObjects("rbxassetid://" .. assetId)[1]
+		return game:GetService("AssetService"):GetBundleDetailsAsync(assetId)
 	end)
-	if success then
-		asset = result
+	if success and result["BundleType"] == "DynamicHead" then
+		local bundle = result
+		-- Some bundles have the dynamic head first, some have the mood first
+		if bundle["Items"][1]["Name"] == "Default Mood" or bundle["Items"][1]["Name"] == "DefaultFallBackMood" then
+			asset = game:GetObjects("rbxassetid://" .. bundle["Items"][2]["Id"])[1]
+		else
+			asset = game:GetObjects("rbxassetid://" .. bundle["Items"][1]["Id"])[1]
+		end
 	else
-		-- Try interpreting the ID as a bundle ID
+		-- Get the asset from the array of instances returned
+		-- For cosmetics this will always(?) be a single instance
 		local success, result = pcall(function()
-			return game:GetService("AssetService"):GetBundleDetailsAsync(assetId)
+			return game:GetObjects("rbxassetid://" .. assetId)[1]
 		end)
 		if success then
-			local bundle = result
-			--print(bundle)
-			if bundle["BundleType"] ~= "DynamicHead" then
-				warn("Invalid asset ID or inserted bundle is not a dynamic head")
-				ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
-				return
-			end
-			-- Some bundles have the dynamic head first, some have the mood first
-			if bundle["Items"][1]["Name"] == "Default Mood" or bundle["Items"][1]["Name"] == "DefaultFallBackMood" then
-				asset = game:GetObjects("rbxassetid://" .. bundle["Items"][2]["Id"])[1]
-			else
-				asset = game:GetObjects("rbxassetid://" .. bundle["Items"][1]["Id"])[1]
-			end
+			asset = result
 		else
-			-- I don't think you can reach here since bundle IDs also start from 1,
-			-- so the bundle check will always work
-			warn("Could not insert asset: " .. tostring(result))
+			warn("Could not insert asset: Invalid asset ID or bundle is not a dynamic head")
 			ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
 			return
 		end
@@ -142,6 +135,8 @@ insertButtonObject.MouseButton1Click:Connect(function()
 	elseif asset.ClassName == "Shirt" or asset.ClassName == "Pants" then
 		character:FindFirstChild(asset.ClassName).Parent = nil
 		asset.Parent = character
+	elseif asset.ClassName == "Decal" then
+		asset.Parent = character.Head
 	else
 		asset.Parent = character
 	end
