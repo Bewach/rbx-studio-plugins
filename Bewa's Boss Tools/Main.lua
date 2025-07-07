@@ -11,7 +11,7 @@ local toolbar: PluginToolbar = plugin:CreateToolbar("Bewa's Boss Tools")
 local toggleButton: PluginToolbarButton = toolbar:CreateButton("Open Menu", "Opens the menu", "rbxassetid://17345051179")
 
 local WIDGET_INITIAL_WIDTH: number = 250
-local WIDGET_INITIAL_HEIGHT: number = 300
+local WIDGET_INITIAL_HEIGHT: number = 315
 
 -- Create new "DockWidgetPluginGuiInfo" object
 local widgetInfo: DockWidgetPluginGuiInfo = DockWidgetPluginGuiInfo.new(
