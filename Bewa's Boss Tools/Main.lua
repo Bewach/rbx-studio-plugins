@@ -77,6 +77,18 @@ Iris:Connect(function()
 	local armsButton = Iris.Button({"Apply"})
 	Iris.End()
 	Iris.End()
+	
+	Iris.CollapsingHeader({"Voice Selector"}, {isUncollapsed = true})
+	voiceSelectText = Iris.Text({"Selected boss:"})
+	local voiceIndex = Iris.State("None")
+	Iris.ComboArray({"Voice"}, {index = voiceIndex}, Utils.Voices)
+	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
+	voiceSuccessText = Iris.Text({""})
+	Iris.End()
+	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
+	local voiceButton = Iris.Button({"Apply"})
+	Iris.End()
+	Iris.End()
 	---- UI ELEMENTS END HERE ----
 	
 	-- Any widget which has children (like windows) must end with an End()
@@ -243,6 +255,28 @@ Iris:Connect(function()
 		armsSuccessText.Instance.Text = "Success"
 		ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
 	end
+	
+	if voiceButton.clicked() then
+		local newVoice: string = voiceIndex:get()
+		
+		local character: Model? = Utils.getBossCharFromSelection(Selection:Get())
+		if not character then
+			voiceSuccessText.Instance.TextColor3 = Utils.Colors.warning
+			voiceSuccessText.Instance.Text = "Invalid selection"
+			return
+		end
+		
+		local recording: string = Utils.startRecordingChanges("Change voice")
+		
+		-- Will set the voice even if the attribute doesn't exist
+		character.Parent.Settings:SetAttribute("Voice", newVoice)
+		-- if voice folder exists, tell user to remove it. Maybe in the success message?
+		-- like: "Success! Remember to remove the Voice folder."
+		
+		voiceSuccessText.Instance.TextColor3 = Utils.Colors.success
+		voiceSuccessText.Instance.Text = "Success"
+		ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
+	end
 end)
 
 Selection.SelectionChanged:Connect(function()
@@ -253,18 +287,22 @@ Selection.SelectionChanged:Connect(function()
 	local selectedObjects = Selection:Get()
 	insertSuccessText.Instance.Text = ""
 	armsSuccessText.Instance.Text = ""
+	voiceSuccessText.Instance.Text = ""
 	if #selectedObjects == 1 then
 		local selected = selectedObjects[1]
 		if selected.ClassName == "Folder" then
 			insertSelectText.Instance.Text = "Selected boss: " .. selected.Name
 			armsSelectText.Instance.Text = "Selected boss: " .. selected.Name
+			voiceSelectText.Instance.Text = "Selected boss: " .. selected.Name
 		else
 			insertSelectText.Instance.Text = "Selected boss: " .. selected.Parent.Name
 			armsSelectText.Instance.Text = "Selected boss: " .. selected.Parent.Name
+			voiceSelectText.Instance.Text = "Selected boss: " .. selected.Parent.Name
 		end
 	else
 		insertSelectText.Instance.Text = "Selected boss: ..."
 		armsSelectText.Instance.Text = "Selected boss: ..."
+		voiceSelectText.Instance.Text = "Selected boss: ..."
 	end
 end)
 

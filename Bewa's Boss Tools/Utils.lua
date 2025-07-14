@@ -10,6 +10,37 @@ Utils.Colors = {
 	danger = Color3.fromHex("dc3545")
 }
 
+-- Voices taken from the "Custom Boss Help" blog by Oofhelloppl on the wiki
+Utils.Voices = {
+	"None",
+	"Flanker", "Trooper", "Arsonist", "Annihilator", "Brute", "Mechanic", "Doctor", "Marksman", "Agent",
+	"Old_Flanker", "Old_Trooper", "Old_Arsonist", "Old_Annihilator", "Old_Brute", "Old_Marksman", "Old_Agent",
+	"BrickBattler", "Builderman", "Clockwork", "Erik Cassel", "Guest", "Matt Dusek", "Shedletsky", "Summoned Zombie", "Telamon",
+	"Baldi",
+	"Brody Foxx",
+	"Eggman",
+	"Freddy Fazbear",
+	"Kiryu",
+	"Mad Mechanic",
+	"Majima",
+	"Morshu",
+	"Seehilator",
+	"Seeper",
+	"Spaceman Sam", "Spaceman Bob", "Spaceman Gary",
+	"Thanos",
+	"Will Ferrell",
+	"Robocop",
+	"Scout",
+	"Soldier",
+	"Pyro",
+	"Demoman",
+	"Heavy",
+	"Engineer",
+	"Medic",
+	"Sniper",
+	"Spy"
+}
+
 function Utils.getBossCharFromSelection(selectedObjects: Instances): Model|nil
 	-- Get the selected character
 	local character: Model
