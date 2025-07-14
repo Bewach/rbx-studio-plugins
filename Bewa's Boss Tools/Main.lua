@@ -82,6 +82,8 @@ Iris:Connect(function()
 	Iris.End()
 	
 	Iris.CollapsingHeader({"Voice Selector"}, {isUncollapsed = true})
+	local voiceFolderRemove = Iris.State(false)
+	Iris.Checkbox({"Remove Voice folder"}, {isChecked = voiceFolderRemove})
 	local voiceIndex = Iris.State("None")
 	Iris.ComboArray({"Voice"}, {index = voiceIndex}, Utils.Voices)
 	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
@@ -256,8 +258,12 @@ Iris:Connect(function()
 		
 		-- Will set the voice even if the attribute doesn't exist
 		character.Parent.Settings:SetAttribute("Voice", newVoice)
-		-- if voice folder exists, tell user to remove it. Maybe in the success message?
-		-- like: "Success! Remember to remove the Voice folder."
+		
+		-- Remove the voice folder if the user wants to
+		local voiceFolder = character.Parent:FindFirstChild("Voice")
+		if voiceFolderRemove:get() and voiceFolder then
+			voiceFolder.Parent = nil
+		end
 		
 		setSuccessText("Success")
 		ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
