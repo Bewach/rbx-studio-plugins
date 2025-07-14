@@ -142,13 +142,6 @@ Iris:Connect(function()
 		end
 		
 		if asset.ClassName == "SpecialMesh" then
-			if asset.ClassName ~= "SpecialMesh" then
-				warn("Asset is not a Dynamic Head")
-				insertSuccessText.Instance.TextColor3 = Utils.Colors.warning
-				insertSuccessText.Instance.Text = "Cannot insert asset"
-				ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
-				return
-			end
 			local accessory: Accessory = script.Parent.DynamicHead:Clone()
 			accessory.Parent = character
 			local handle: Part = accessory.Handle
@@ -171,8 +164,12 @@ Iris:Connect(function()
 			asset.Parent = character
 		elseif asset.ClassName == "Decal" then
 			asset.Parent = character.Head
-		else
+		elseif asset.ClassName == "Accessory" then
 			asset.Parent = character
+		else
+			setSuccessText("Warning", "Cannot insert asset")
+			ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
+			return
 		end
 		
 		setSuccessText("Success")
