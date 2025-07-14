@@ -20,6 +20,10 @@ function Utils.getBossCharFromSelection(selectedObjects: Instances): Model|nil
 	if character and character:IsA("Folder") and character:FindFirstChild("Character") then
 		character = character.Character
 	end
+	-- If arms are selected, try to get the character
+	if character and character:IsA("Model") and character.Name == "Arms" then
+		character = character.Parent.Character
+	end
 	-- Validate that the selected object is a character
 	if not (character and character:IsA("Model") and character:FindFirstChild("Humanoid")) then
 		warn("Selection is not a boss")

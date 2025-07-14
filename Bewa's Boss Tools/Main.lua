@@ -176,24 +176,19 @@ Iris:Connect(function()
 	if armsButton.clicked() then
 		local arms: Model
 		local selectedObjects: Instances = Selection:Get()
-		if #selectedObjects == 1 and selectedObjects[1]:IsA("Model") and selectedObjects[1].Name == "Arms" then
-			-- Arms selected
-			arms = selectedObjects[1]
-		else
-			-- Try to get the arms from the selected char or boss folder
-			local character: Model? = Utils.getBossCharFromSelection(selectedObjects)
-			if not character then
-				armsSuccessText.Instance.TextColor3 = Utils.Colors.warning
-				armsSuccessText.Instance.Text = "Invalid selection"
-				return
-			end
-			arms = character.Parent:FindFirstChild("Arms")
-			if not (arms and arms:IsA("Model")) then
-				armsSuccessText.Instance.TextColor3 = Utils.Colors.warning
-				armsSuccessText.Instance.Text = "I can't find the arms??"
-				warn("I can't find the arms??")
-				return
-			end
+		-- Try to get the arms from the selected char or boss folder
+		local character: Model? = Utils.getBossCharFromSelection(selectedObjects)
+		if not character then
+			armsSuccessText.Instance.TextColor3 = Utils.Colors.warning
+			armsSuccessText.Instance.Text = "Invalid selection"
+			return
+		end
+		arms = character.Parent:FindFirstChild("Arms")
+		if not (arms and arms:IsA("Model")) then
+			armsSuccessText.Instance.TextColor3 = Utils.Colors.warning
+			armsSuccessText.Instance.Text = "I can't find the arms??"
+			warn("I can't find the arms??")
+			return
 		end
 		
 		local recording: string = Utils.startRecordingChanges("Apply texture to arms")
