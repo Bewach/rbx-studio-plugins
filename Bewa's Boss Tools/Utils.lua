@@ -4,10 +4,10 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 
 -- Colors taken from Bootstrap
 Utils.Colors = {
-	white = Color3.fromHex("fff"),
-	success = Color3.fromHex("28a745"),
-	warning = Color3.fromHex("ffc107"),
-	danger = Color3.fromHex("dc3545")
+	White = Color3.fromHex("fff"),
+	Success = Color3.fromHex("28a745"),
+	Warning = Color3.fromHex("ffc107"),
+	Danger = Color3.fromHex("dc3545")
 }
 
 -- Voices taken from the "Custom Boss Help" blog by Oofhelloppl on the wiki

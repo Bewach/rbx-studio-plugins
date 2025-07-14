@@ -51,6 +51,17 @@ Iris:Connect(function()
 	window.state.position:set(mainWidget.AbsolutePosition)
 
 	---- UI ELEMENTS BEGIN HERE ----
+	Iris.MenuBar() -- Menu bar for boss selection
+	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
+	selectText = Iris.Text({"Selected boss:"})
+	Iris.End()
+	Iris.End()
+	Iris.MenuBar() -- Menu bar for success text
+	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
+	successText = Iris.Text({""})
+	Iris.End()
+	Iris.End()
+	
 	Iris.CollapsingHeader({"Catalog Inserter"}, {isUncollapsed = true})
 	local assetIdInput = Iris.InputNum({"Asset ID",
 		[Iris.Args.InputNum.Increment] = 1,
@@ -58,10 +69,6 @@ Iris:Connect(function()
 		[Iris.Args.InputNum.Max] = 9007199254740990,
 		[Iris.Args.InputNum.NoButtons] = true
 	})
-	insertSelectText = Iris.Text({"Selected boss: "})
-	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
-	insertSuccessText = Iris.Text({""})
-	Iris.End()
 	-- An absolutely terrible way to center things, but I guess it's the only thing that works
 	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
 	local insertButton = Iris.Button({"Insert"})
@@ -69,22 +76,14 @@ Iris:Connect(function()
 	Iris.End()
 	
 	Iris.CollapsingHeader({"Arm Texture-inator"}, {isUncollapsed = true})
-	armsSelectText = Iris.Text({"Selected boss:"})
-	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
-	armsSuccessText = Iris.Text({""})
-	Iris.End()
 	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
 	local armsButton = Iris.Button({"Apply"})
 	Iris.End()
 	Iris.End()
 	
 	Iris.CollapsingHeader({"Voice Selector"}, {isUncollapsed = true})
-	voiceSelectText = Iris.Text({"Selected boss:"})
 	local voiceIndex = Iris.State("None")
 	Iris.ComboArray({"Voice"}, {index = voiceIndex}, Utils.Voices)
-	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
-	voiceSuccessText = Iris.Text({""})
-	Iris.End()
 	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
 	local voiceButton = Iris.Button({"Apply"})
 	Iris.End()
@@ -102,15 +101,13 @@ Iris:Connect(function()
 		local assetId: number = assetIdInput.state.number:get()
 		-- Make sure the user entered something
 		if assetId == 0 then
-			insertSuccessText.Instance.TextColor3 = Utils.Colors.warning
-			insertSuccessText.Instance.Text = "Asset ID cannot be 0"
+			setSuccessText("Warning", "Asset ID cannot be 0")
 			return
 		end
 		
 		local character: Model? = Utils.getBossCharFromSelection(Selection:Get())
 		if not character then
-			insertSuccessText.Instance.TextColor3 = Utils.Colors.warning
-			insertSuccessText.Instance.Text = "Invalid selection"
+			setSuccessText("Warning", "Invalid selection")
 			return
 		end
 		
@@ -138,9 +135,7 @@ Iris:Connect(function()
 			if success then
 				asset = result
 			else
-				warn("Could not insert asset: Invalid asset ID or bundle is not a dynamic head")
-				insertSuccessText.Instance.TextColor3 = Utils.Colors.warning
-				insertSuccessText.Instance.Text = "Invalid asset ID"
+				setSuccessText("Warning", "Invalid asset ID")
 				ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
 				return
 			end
@@ -180,8 +175,7 @@ Iris:Connect(function()
 			asset.Parent = character
 		end
 		
-		insertSuccessText.Instance.TextColor3 = Utils.Colors.success
-		insertSuccessText.Instance.Text = "Success"
+		setSuccessText("Success")
 		ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
 	end
 	
@@ -191,15 +185,12 @@ Iris:Connect(function()
 		-- Try to get the arms from the selected char or boss folder
 		local character: Model? = Utils.getBossCharFromSelection(selectedObjects)
 		if not character then
-			armsSuccessText.Instance.TextColor3 = Utils.Colors.warning
-			armsSuccessText.Instance.Text = "Invalid selection"
+			setSuccessText("Warning", "Invalid selection")
 			return
 		end
 		arms = character.Parent:FindFirstChild("Arms")
 		if not (arms and arms:IsA("Model")) then
-			armsSuccessText.Instance.TextColor3 = Utils.Colors.warning
-			armsSuccessText.Instance.Text = "I can't find the arms??"
-			warn("I can't find the arms??")
+			setSuccessText("Warning", "I can't find the arms??")
 			return
 		end
 		
@@ -251,8 +242,7 @@ Iris:Connect(function()
 		rightShirt.ShirtTemplate = character.Shirt.ShirtTemplate
 		rightShirt.Color3 = character.Shirt.Color3
 		
-		armsSuccessText.Instance.TextColor3 = Utils.Colors.success
-		armsSuccessText.Instance.Text = "Success"
+		setSuccessText("Success")
 		ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
 	end
 	
@@ -261,8 +251,7 @@ Iris:Connect(function()
 		
 		local character: Model? = Utils.getBossCharFromSelection(Selection:Get())
 		if not character then
-			voiceSuccessText.Instance.TextColor3 = Utils.Colors.warning
-			voiceSuccessText.Instance.Text = "Invalid selection"
+			setSuccessText("Warning", "Invalid selection")
 			return
 		end
 		
@@ -273,11 +262,19 @@ Iris:Connect(function()
 		-- if voice folder exists, tell user to remove it. Maybe in the success message?
 		-- like: "Success! Remember to remove the Voice folder."
 		
-		voiceSuccessText.Instance.TextColor3 = Utils.Colors.success
-		voiceSuccessText.Instance.Text = "Success"
+		setSuccessText("Success")
 		ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
 	end
 end)
+
+function setSuccessText(state: "Success"|"Warning"|"Danger", message: string|nil)
+	successText.Instance.TextColor3 = Utils.Colors[state]
+	if not message then
+		successText.Instance.Text = state
+	else
+		successText.Instance.Text = message
+	end
+end
 
 Selection.SelectionChanged:Connect(function()
 	if not irisConnected then
@@ -285,24 +282,16 @@ Selection.SelectionChanged:Connect(function()
 	end
 	
 	local selectedObjects = Selection:Get()
-	insertSuccessText.Instance.Text = ""
-	armsSuccessText.Instance.Text = ""
-	voiceSuccessText.Instance.Text = ""
+	successText.Instance.Text = ""
 	if #selectedObjects == 1 then
 		local selected = selectedObjects[1]
 		if selected.ClassName == "Folder" then
-			insertSelectText.Instance.Text = "Selected boss: " .. selected.Name
-			armsSelectText.Instance.Text = "Selected boss: " .. selected.Name
-			voiceSelectText.Instance.Text = "Selected boss: " .. selected.Name
+			selectText.Instance.Text = "Selected boss: " .. selected.Name
 		else
-			insertSelectText.Instance.Text = "Selected boss: " .. selected.Parent.Name
-			armsSelectText.Instance.Text = "Selected boss: " .. selected.Parent.Name
-			voiceSelectText.Instance.Text = "Selected boss: " .. selected.Parent.Name
+			selectText.Instance.Text = "Selected boss: " .. selected.Parent.Name
 		end
 	else
-		insertSelectText.Instance.Text = "Selected boss: ..."
-		armsSelectText.Instance.Text = "Selected boss: ..."
-		voiceSelectText.Instance.Text = "Selected boss: ..."
+		selectText.Instance.Text = "Selected boss: ..."
 	end
 end)
 
