@@ -57,7 +57,7 @@ function Utils.getBossCharFromSelection(selectedObjects: Instances): Model|nil
 	end
 	-- Validate that the selected object is a character
 	if not (character and character:IsA("Model") and character:FindFirstChild("Humanoid")) then
-		warn("Selection is not a boss")
+		--warn("Selection is not a boss")
 		return
 	end
 	return character

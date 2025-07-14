@@ -52,9 +52,7 @@ Iris:Connect(function()
 
 	---- UI ELEMENTS BEGIN HERE ----
 	Iris.MenuBar() -- Menu bar for boss selection
-	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
 	selectText = Iris.Text({"Selected boss:"})
-	Iris.End()
 	Iris.End()
 	Iris.MenuBar() -- Menu bar for success text
 	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
@@ -62,7 +60,7 @@ Iris:Connect(function()
 	Iris.End()
 	Iris.End()
 	
-	Iris.CollapsingHeader({"Catalog Inserter"}, {isUncollapsed = true})
+	Iris.SeparatorText({"Catalog Inserter"})
 	local assetIdInput = Iris.InputNum({"Asset ID",
 		[Iris.Args.InputNum.Increment] = 1,
 		[Iris.Args.InputNum.Min] = 0,
@@ -73,22 +71,21 @@ Iris:Connect(function()
 	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
 	local insertButton = Iris.Button({"Insert"})
 	Iris.End()
-	Iris.End()
 	
-	Iris.CollapsingHeader({"Arm Texture-inator"}, {isUncollapsed = true})
+	Iris.SeparatorText({"Arm Texture-inator"})
+	Iris.Text({"Copies the shirt texture from the character's arms to the viewmodel", true})
 	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
 	local armsButton = Iris.Button({"Apply"})
 	Iris.End()
-	Iris.End()
 	
-	Iris.CollapsingHeader({"Voice Selector"}, {isUncollapsed = true})
+	Iris.SeparatorText({"Voice Selector"})
+	Iris.Text({"Make sure to remove the Voice folder if using this. The folder overrides the Voice setting.", true})
 	local voiceFolderRemove = Iris.State(false)
 	Iris.Checkbox({"Remove Voice folder"}, {isChecked = voiceFolderRemove})
 	local voiceIndex = Iris.State("None")
 	Iris.ComboArray({"Voice"}, {index = voiceIndex}, Utils.Voices)
 	Iris.SameLine({[Iris.Args.SameLine.HorizontalAlignment] = Enum.HorizontalAlignment.Center})
 	local voiceButton = Iris.Button({"Apply"})
-	Iris.End()
 	Iris.End()
 	---- UI ELEMENTS END HERE ----
 	
@@ -219,16 +216,19 @@ Iris:Connect(function()
 		end
 		
 		local bodyColors: BodyColors = character:FindFirstChildOfClass("BodyColors")
+		-- If we don't have BodyColors, use the character's current arm color
 		if not bodyColors then
 			if character:FindFirstChild("Left Arm") then
+				-- The character is R6
 				leftShirt.Parent["Left Arm"].Color = character["Left Arm"].Color
 				rightShirt.Parent["Right Arm"].Color = character["Right Arm"].Color
 			elseif character:FindFirstChild("LeftHand") then
+				-- The character is R15
 				leftShirt.Parent["Left Arm"].Color = character["LeftHand"].Color
 				rightShirt.Parent["Right Arm"].Color = character["RightHand"].Color
 			else
 				-- Can you even get here?
-				warn("Sorry, I can't find the arm colors")
+				setSuccessText("Warning", "I can't find the arm colors")
 				ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
 				return
 			end
@@ -284,6 +284,7 @@ Selection.SelectionChanged:Connect(function()
 		return
 	end
 	
+	-- We reset the success and select text whenever the selection changes
 	local selectedObjects = Selection:Get()
 	successText.Instance.Text = ""
 	if #selectedObjects == 1 then
